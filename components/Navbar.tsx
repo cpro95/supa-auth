@@ -29,10 +29,10 @@ const Navbar = () => {
                 Profile
               </a>
               <a
-                href="#"
+                href="/posts"
                 className="py-5 px-3 text-gray-700 hover:text-gray-900"
               >
-                Pricing
+                Posts
               </a>
             </div>
           </div>
@@ -78,8 +78,8 @@ const Navbar = () => {
         >
           Profile
         </a>
-        <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">
-          Pricing
+        <a href="/posts" className="block py-2 px-4 text-sm hover:bg-gray-200">
+          Posts
         </a>
 
         {loggedIn ? (

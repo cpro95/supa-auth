@@ -8,8 +8,11 @@ import {
 import Router from "next/router";
 import { AuthChangeEvent, User, Session } from "@supabase/supabase-js";
 import { supabase } from "../supabase";
-import { useMessage, MessageProps } from "../message";
-import { SupabaseAuthPayload } from "./auth.types";
+import { useMessage } from "../message";
+import {
+  SupabaseAuthPayload,
+  SupabaseChangePasswordPayload,
+} from "./auth.types";
 
 export type AuthContextProps = {
   user: User;
@@ -17,6 +20,7 @@ export type AuthContextProps = {
   signIn: (payload: SupabaseAuthPayload) => void;
   signInWithGithub: (evt: SyntheticEvent) => void;
   signOut: () => void;
+  updatePassword: (payload: SupabaseChangePasswordPayload) => void;
   loading: boolean;
   loggedIn: boolean;
   userLoading: boolean;
@@ -73,7 +77,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         handleMessage({ message: error.message, type: "error" });
       } else {
         handleMessage({
-          message: "Log in successful. I'll redirect you once I'm done",
+          message: "Log in successful.",
           type: "success",
         });
         handleMessage({ message: `Welcome, ${user.email}`, type: "success" });
@@ -91,6 +95,32 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
 
   const signOut = async () => await supabase.auth.signOut();
 
+  // change password with provided details
+  const updatePassword = async (payload: SupabaseChangePasswordPayload) => {
+    try {
+      setLoading(true);
+      const { error, user } = await supabase.auth.update(payload);
+      if (error) {
+        console.log(error);
+        handleMessage({ message: error.message, type: "error" });
+      } else {
+        handleMessage({
+          message: "Change Password successful.",
+          type: "success",
+        });
+        handleMessage({ message: `Welcome, ${user.email}`, type: "success" });
+      }
+    } catch (error) {
+      console.log(error);
+      handleMessage({
+        message: error.error_description || error,
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const setServerSession = async (event: AuthChangeEvent, session: Session) => {
     await fetch("/api/auth", {
       method: "POST",
@@ -107,7 +137,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       setUser(user);
       setUserLoading(false);
       setLoggedIn(true);
-      Router.push("/profile");
+      // Router.push("/profile");
     } else {
       setUserLoading(false);
     }
@@ -120,7 +150,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         if (user) {
           setUser(user);
           setLoggedIn(true);
-          Router.push("/profile");
+          // Router.push("/profile");
         } else {
           setUser(null);
           setLoading(false);
@@ -143,6 +173,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         signIn,
         signInWithGithub,
         signOut,
+        updatePassword,
         loading,
         loggedIn,
         userLoading,
