@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useFormFields } from "../lib/utils";
 import { useMessage } from "../lib/message";
 import { useAuth } from "../lib/auth";
+import Router from "next/router";
 
 type FormFieldProps = {
   email: string;
@@ -18,7 +19,8 @@ const FORM_VALUES: FormFieldProps = {
 const Auth: React.FC = (props) => {
   const [isSignIn, setIsSignIn] = useState(true);
 
-  const { loading, signIn, signUp, signInWithGithub } = useAuth();
+  const { loading, signIn, signUp } = useAuth();
+  // const { loading, signIn, signUp, signInWithGithub } = useAuth();
 
   const { messages } = useMessage();
 
@@ -30,6 +32,7 @@ const Auth: React.FC = (props) => {
     event.preventDefault();
     isSignIn ? signIn(values) : signUp(values);
     resetFormFields();
+    setTimeout(() => Router.push("/"), 1000);
   };
 
   return (
@@ -63,14 +66,14 @@ const Auth: React.FC = (props) => {
         onSubmit={handleSumbit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <button
+        {/* <button
           onClick={signInWithGithub}
           className="flex-1 bg-gray-200 text-green-700 py-3 rounded w-full text-center shadow"
         >
           <FaGithub className="inline-block text-2xl" />{" "}
           {isSignIn ? "Log In" : "Sign Up"} with <strong>Github</strong>
         </button>
-        <hr className="my-4" />
+        <hr className="my-4" /> */}
 
         <div className="mb-4">
           <label

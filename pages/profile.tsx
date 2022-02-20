@@ -63,14 +63,14 @@ const ProfilePage = ({ user }) => {
       {user && (
         <div className="flex flex-row items-center justify-center space-x-4 mb-4">
           <button
-            className="border bg-gray-500 border-gray-600 text-white px-3 py-2 rounded text-center transition duration-150 shadow-lg"
+            className="bg-transparent hover:bg-blue-600 text-sm text-blue-600 hover:text-white font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg"
             onClick={signOut}
           >
             Log Out
           </button>
           <div>or</div>
           <button
-            className="border bg-cyan-500 border-cyan-600 text-white px-3 py-2 rounded text-center transition duration-150 shadow-lg"
+            className="bg-transparent hover:bg-gray-600 text-sm text-gray-600 hover:text-white font-semibold py-2 px-4 border border-gray-500 hover:border-transparent rounded-lg"
             onClick={alterPassword}
           >
             Change Password
@@ -138,7 +138,7 @@ const ProfilePage = ({ user }) => {
 
           <div className="flex gap-2">
             <button
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-transparent hover:bg-red-500 text-sm text-red-500 hover:text-white font-semibold py-2 px-4 border border-green-400 hover:border-transparent rounded-lg"
               type="submit"
             >
               Update
