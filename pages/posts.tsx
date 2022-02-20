@@ -78,8 +78,9 @@ const PostsPage = ({ user }: { user: User }) => {
     <div className="flex flex-col items-center justify-start py-4 min-h-screen">
       <h2 className="text-2xl my-4">Hello, Supabase User!</h2>
       {messages &&
-        messages.map((message) => (
+        messages.map((message, index) => (
           <div
+            key={index}
             className={classNames(
               "shadow-md rounded px-3 py-2 text-shadow transition-all mt-2 text-center",
               message.type === "error"

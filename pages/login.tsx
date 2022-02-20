@@ -25,10 +25,10 @@ const MESSAGE_VALUES: MessageProps = {
 
 const Login: React.FC = (props) => {
   const [loading, setLoading] = useState(false);
-  
+
   const [values, handleChange, resetFormFields] =
-  useFormFields<SignInFieldProps>(FORM_VALUES);
-  
+    useFormFields<SignInFieldProps>(FORM_VALUES);
+
   const { messages, handleMessage } = useMessage();
 
   // sign-in a user with provided details
@@ -74,6 +74,7 @@ const Login: React.FC = (props) => {
       {messages &&
         messages.map((message, index) => (
           <div
+            key={index}
             className={classNames(
               "shadow-md rounded px-3 py-2 text-shadow transition-all mt-2 text-center",
               message.type === "error"

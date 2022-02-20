@@ -50,6 +50,7 @@ const Auth: React.FC = (props) => {
       {messages &&
         messages.map((message, index) => (
           <div
+            key={index}
             className={classNames(
               "shadow-md rounded px-3 py-2 text-shadow transition-all mt-2 text-center",
               message.type === "error"

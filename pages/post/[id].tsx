@@ -1,46 +1,33 @@
 import { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
+import { GetServerSideProps, NextApiRequest } from "next";
 import { useMessage } from "../../lib/message";
 import { supabase } from "../../lib/supabase";
 import { User } from "@supabase/supabase-js";
 import classNames from "classnames";
 import { PostsProps } from "../posts";
+import cookie from "cookie";
 
-const PostDetailPage = ({ user }: { user: User }) => {
+const PostDetailPage = ({ user, post }: { user: User; post: PostsProps }) => {
   const { messages, handleMessage } = useMessage();
   const [date, setDate] = useState<string>();
-  const [post, setPost] = useState<PostsProps>();
-  const router = useRouter();
-  const { id } = router.query;
-
   useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    let { data: post, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("id", Number(id))
-      .limit(1)
-      .single();
-    if (error) {
-      console.log(error);
+    // null means that post is empty
+    if (post === null) {
+      // console.log(post);
       handleMessage({ message: "Error : No post", type: "error" });
     } else {
-      setPost(post);
       let postDate = new Date(post.inserted_at);
       setDate(postDate.toLocaleDateString("kr"));
     }
-  };
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-start py-4 min-h-screen">
       <h2 className="text-2xl my-4">Hello, Supabase User!</h2>
       {messages &&
-        messages.map((message) => (
+        messages.map((message, index) => (
           <div
+            key={index}
             className={classNames(
               "shadow-md rounded px-3 py-2 text-shadow transition-all mt-2 text-center",
               message.type === "error"
@@ -82,10 +69,11 @@ const PostDetailPage = ({ user }: { user: User }) => {
 
 export default PostDetailPage;
 
-export type NextAppPageUserProps = {
+export type NextAppPageUserPostProps = {
   props: {
     user: User;
     loggedIn: boolean;
+    post: PostsProps;
   };
 };
 
@@ -97,7 +85,7 @@ export type NextAppPageRedirProps = {
 };
 
 export type NextAppPageServerSideProps =
-  | NextAppPageUserProps
+  | NextAppPageUserPostProps
   | NextAppPageRedirProps;
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -114,10 +102,35 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
   }
 
+  const token = cookie.parse(req.headers.cookie)["sb:token"];
+  const user2 = cookie.parse(req.headers.cookie)["user"];
+
+  supabase.auth.session = () => ({
+    token_type: "bearer",
+    user: user2,
+    access_token: token,
+  });
+
+  // returned supabase data is basically array, so post is array type
+  // but .single() function will return only one object, that is not array type.
+  let { data: post, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", Number(params?.id))
+    .limit(1)
+    .single();
+
+  if (!post) {
+    console.log(error);
+  } else {
+    // console.log(post);
+  }
+
   return {
     props: {
       user,
       loggedIn: !!user,
+      post,
     },
   };
 };
