@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useMessage } from "../lib/message";
 import { supabase } from "../lib/supabase";
 import { User } from "@supabase/supabase-js";
@@ -55,7 +56,6 @@ const ListPosts = ({ post }: { post: PostsProps }) => {
 };
 
 const PostsPage = ({ user }: { user: User }) => {
-  // const { signOut } = useAuth();
   const { messages, handleMessage } = useMessage();
   const [posts, setPosts] = useState<PostsProps[]>();
 
@@ -76,7 +76,10 @@ const PostsPage = ({ user }: { user: User }) => {
 
   return (
     <div className="flex flex-col items-center justify-start py-4 min-h-screen">
-      <h2 className="text-2xl my-4">Hello, Supabase User!</h2>
+      <h2 className="text-2xl my-4">
+        {" "}
+        Hello, {user && user.email ? user.email : "Supabase User!"}
+      </h2>
       {messages &&
         messages.map((message, index) => (
           <div
@@ -94,7 +97,16 @@ const PostsPage = ({ user }: { user: User }) => {
           </div>
         ))}
 
-      <h3 className="py-3 font-semibold text-lg text-blue-600">Posts List</h3>
+      <div className="flex flex-row items-center justify-center space-x-4 mb-4 py-4">
+        <Link href="/post/create">
+          <a className="bg-transparent hover:bg-blue-600 text-sm text-blue-600 hover:text-white font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg">
+            Create A Post
+          </a>
+        </Link>
+      </div>
+
+      <h3 className="py-3 font-semibold text-2xl text-blue-600">Posts List</h3>
+
       <ul>
         {posts &&
           posts.map((post: PostsProps) => (

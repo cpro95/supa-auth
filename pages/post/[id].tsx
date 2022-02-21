@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetServerSideProps, NextApiRequest } from "next";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useMessage } from "../../lib/message";
 import { supabase } from "../../lib/supabase";
 import { User } from "@supabase/supabase-js";
@@ -10,6 +12,7 @@ import cookie from "cookie";
 const PostDetailPage = ({ user, post }: { user: User; post: PostsProps }) => {
   const { messages, handleMessage } = useMessage();
   const [date, setDate] = useState<string>();
+  const router = useRouter();
   useEffect(() => {
     // null means that post is empty
     if (post === null) {
@@ -21,9 +24,34 @@ const PostDetailPage = ({ user, post }: { user: User; post: PostsProps }) => {
     }
   }, []);
 
+  const deletePost = async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .delete()
+      .match({
+        id: Number(post.id),
+      });
+    if (error) {
+      console.log(error);
+      handleMessage({
+        message: "Error : Delete A Post",
+        type: "error",
+      });
+    } else {
+      console.log(data);
+      handleMessage({
+        message: "Success : Deleted A Post",
+        type: "success",
+      });
+    }
+    router.push("/posts");
+  };
+
   return (
     <div className="flex flex-col items-center justify-start py-4 min-h-screen">
-      <h2 className="text-2xl my-4">Hello, Supabase User!</h2>
+      <h2 className="text-2xl my-4">
+        Hello, {user && user.email ? user.email : "Supabase User!"}
+      </h2>
       {messages &&
         messages.map((message, index) => (
           <div
@@ -44,6 +72,21 @@ const PostDetailPage = ({ user, post }: { user: User; post: PostsProps }) => {
       <h3 className="py-3 font-semibold text-lg text-blue-600">
         Post Detail List
       </h3>
+      <div className="flex flex-row items-center justify-center space-x-4 mb-4">
+        <Link href={`/post/modify?id=${post.id}`}>
+          <a className="bg-transparent hover:bg-blue-600 text-sm text-blue-600 hover:text-white font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg">
+            Modify
+          </a>
+        </Link>
+        <div>or</div>
+        <a
+          className="bg-transparent hover:bg-gray-600 text-sm text-gray-600 hover:text-white font-semibold py-2 px-4 border border-gray-500 hover:border-transparent rounded-lg"
+          onClick={deletePost}
+        >
+          Delete
+        </a>
+      </div>
+
       {post && (
         <section className="text-center lg:text-left">
           <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8 lg:items-end lg:justify-between lg:flex">

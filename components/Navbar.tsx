@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import { FaBars, FaBuffer, FaTimes } from "react-icons/fa";
 import { useAuth } from "../lib/auth";
 
@@ -14,26 +15,26 @@ const Navbar = () => {
           <div className="flex space-x-4">
             {/* logo */}
             <div>
-              <a href="/" className="flex items-center py-5 px-2 text-gray-700">
-                <FaBuffer className="w-6 h-6" />
-                <span className="font-bold px-2">Home</span>
-              </a>
+              <Link href="/">
+                <a className="flex items-center py-5 px-2 text-gray-700">
+                  <FaBuffer className="w-6 h-6" />
+                  <span className="font-bold px-2">Home</span>
+                </a>
+              </Link>
             </div>
 
             {/* primary nav */}
             <div className="hidden md:flex items-center space-x-1">
-              <a
-                href="/profile"
-                className="py-5 px-3 text-gray-700 hover:text-gray-900"
-              >
-                Profile
-              </a>
-              <a
-                href="/posts"
-                className="py-5 px-3 text-gray-700 hover:text-gray-900"
-              >
-                Posts
-              </a>
+              <Link href="/profile">
+                <a className="py-5 px-3 text-gray-700 hover:text-gray-900">
+                  Profile
+                </a>
+              </Link>
+              <Link href="/posts">
+                <a className="py-5 px-3 text-gray-700 hover:text-gray-900">
+                  Posts
+                </a>
+              </Link>
             </div>
           </div>
           {/* secondary nav */}
@@ -46,15 +47,14 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-1">
-              <a href="/auth" className="py-5 px-3">
-                Login
-              </a>
-              <a
-                href="/auth"
-                className="py-2 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300"
-              >
-                Signup
-              </a>
+              <Link href="/auth">
+                <a className="py-5 px-3">Login</a>
+              </Link>
+              <Link href="/auth">
+                <a className="py-2 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300">
+                  Signup
+                </a>
+              </Link>
             </div>
           )}
           {/* mobile menu */}
@@ -72,15 +72,12 @@ const Navbar = () => {
 
       {/* mobile menu items */}
       <div className={`${!menuToggle ? "hidden" : ""} md:hidden`}>
-        <a
-          href="/profile"
-          className="block py-2 px-4 text-sm hover:bg-gray-200"
-        >
-          Profile
-        </a>
-        <a href="/posts" className="block py-2 px-4 text-sm hover:bg-gray-200">
-          Posts
-        </a>
+        <Link href="/profile">
+          <a className="block py-2 px-4 text-sm hover:bg-gray-200">Profile</a>
+        </Link>
+        <Link href="/posts">
+          <a className="block py-2 px-4 text-sm hover:bg-gray-200">Posts</a>
+        </Link>
 
         {loggedIn ? (
           <button
@@ -91,18 +88,14 @@ const Navbar = () => {
           </button>
         ) : (
           <div>
-            <a
-              href="/auth"
-              className="block py-2 px-4 text-sm hover:bg-gray-200"
-            >
-              Login
-            </a>
-            <a
-              href="/auth"
-              className="block py-2 px-4 text-sm hover:bg-gray-200"
-            >
-              Signup
-            </a>
+            <Link href="/auth">
+              <a className="block py-2 px-4 text-sm hover:bg-gray-200">Login</a>
+            </Link>
+            <Link href="/auth">
+              <a className="block py-2 px-4 text-sm hover:bg-gray-200">
+                Signup
+              </a>
+            </Link>
           </div>
         )}
       </div>
