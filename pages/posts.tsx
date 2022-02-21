@@ -30,25 +30,24 @@ const ListPosts = ({ post }: { post: PostsProps }) => {
           <span className="block xl:inline">{date}</span>
         </div>
         <div className="relative flex flex-col sm:flex-row sm:space-x-4 py-4">
-          <a
-            href={`/post/${post.id}`}
-            className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-indigo-500 rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto"
-          >
-            Read the article
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5 ml-1"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </a>
+          <Link href={`/post/${post.id}`}>
+            <a className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-indigo-500 rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto">
+              Read the article
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 ml-1"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          </Link>
         </div>
       </div>
     </li>
@@ -101,6 +100,11 @@ const PostsPage = ({ user }: { user: User }) => {
         <Link href="/post/create">
           <a className="bg-transparent hover:bg-blue-600 text-sm text-blue-600 hover:text-white font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg">
             Create A Post
+          </a>
+        </Link>
+        <Link href="/post/search">
+          <a className="bg-transparent hover:bg-blue-600 text-sm text-blue-600 hover:text-white font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg">
+            Search Posts
           </a>
         </Link>
       </div>
